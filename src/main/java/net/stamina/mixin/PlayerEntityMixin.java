@@ -1,7 +1,5 @@
 package net.stamina.mixin;
 
-import java.util.UUID;
-
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -11,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -20,10 +19,13 @@ import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerAbilities;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import net.stamina.access.StaminaAccess;
 import net.stamina.init.AttributeInit;
 import net.stamina.init.ConfigInit;
+import net.stamina.network.packet.StaminaPacket;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements StaminaAccess {
@@ -33,8 +35,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
     @Final
     private PlayerAbilities abilities;
 
-    private static final EntityAttributeModifier STAMINA_SPEED_REDUCTION = new EntityAttributeModifier(UUID.fromString("1dfe298b-4f31-432a-a159-f766c304cac7"), "Stamina speed reduction", -0.05f,
-            EntityAttributeModifier.Operation.MULTIPLY_BASE);
+    private static final Identifier STAMINA_REDUCTION = Identifier.of("stamina:stamina_speed_reduction");
+    private static final EntityAttributeModifier STAMINA_SPEED_REDUCTION = new EntityAttributeModifier(STAMINA_REDUCTION, -0.05f, EntityAttributeModifier.Operation.ADD_VALUE);
     private int stamina = (int) this.getAttributeValue(AttributeInit.GENERIC_MAX_STAMINA);
     private int exhaustionTime = 0;
 
@@ -64,12 +66,18 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
             if (this.exhaustionTime <= 0) {
                 if (this.getHungerManager().getFoodLevel() > 6.0f) {
                     addStamina(1);
+                    System.out.println(this.getWorld().isClient() + " : " + this.stamina);
                 }
             } else {
                 this.exhaustionTime--;
+                if (this.exhaustionTime == 0 && !this.getWorld().isClient()) {
+                    ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new StaminaPacket(stamina));
+                }
             }
         } else if (!this.abilities.creativeMode) {
             addStamina(-1); // check for speed effect
+        } else if (this.getWorld().getTime() % 5 == 0 && this.isInCreativeMode() && this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_REDUCTION)) {
+            this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(STAMINA_SPEED_REDUCTION);
         }
         // }
     }
@@ -86,13 +94,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
         } else if (this.stamina + stamina <= 0) {
             this.stamina = 0;
             this.exhaustionTime = ConfigInit.CONFIG.exhaustionTime;
-            if (!this.getWorld().isClient() && !this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_SPEED_REDUCTION)) {
+            if (!this.getWorld().isClient() && !this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_REDUCTION)) {
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).addTemporaryModifier(STAMINA_SPEED_REDUCTION);
+                ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new StaminaPacket(stamina));
             }
         } else {
             this.stamina += stamina;
-            if (!this.getWorld().isClient() && this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_SPEED_REDUCTION)) {
+            if (!this.getWorld().isClient() && this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_REDUCTION)) {
                 this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(STAMINA_SPEED_REDUCTION);
+                ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new StaminaPacket(stamina));
             }
         }
     }

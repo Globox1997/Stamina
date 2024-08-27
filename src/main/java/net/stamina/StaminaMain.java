@@ -4,7 +4,9 @@ import net.fabricmc.api.ModInitializer;
 import net.stamina.init.AttributeInit;
 import net.stamina.init.ConfigInit;
 import net.stamina.init.EffectInit;
+import net.stamina.init.EventInit;
 import net.stamina.init.ItemInit;
+import net.stamina.network.StaminaServerPacket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,5 +21,7 @@ public class StaminaMain implements ModInitializer {
         AttributeInit.init();
         EffectInit.init();
         ItemInit.init();
+        EventInit.init();
+        StaminaServerPacket.init();
     }
 }

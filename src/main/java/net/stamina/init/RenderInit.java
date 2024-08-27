@@ -10,7 +10,7 @@ import net.stamina.access.StaminaAccess;
 @Environment(EnvType.CLIENT)
 public class RenderInit {
 
-    private static final Identifier ICONS = new Identifier("stamina", "textures/gui/stamina_icons.png");
+    private static final Identifier ICONS = Identifier.of("stamina", "textures/gui/stamina_icons.png");
 
     public static void init() {
         HudRenderCallback.EVENT.register((drawContext, tickDelta) -> {

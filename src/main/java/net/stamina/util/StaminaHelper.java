@@ -10,6 +10,8 @@ public class StaminaHelper {
     public static boolean isOutOfStamina(PlayerEntity playerEntity) {
         if (!playerEntity.isCreative()
                 && ((StaminaAccess) playerEntity).getStamina() <= (int) (playerEntity.getAttributeValue(AttributeInit.GENERIC_MAX_STAMINA) * (ConfigInit.CONFIG.minSprintStamina / 100.0f))) {
+
+            System.out.println(((StaminaAccess) playerEntity).getStamina());
             return true;
         }
         return false;
