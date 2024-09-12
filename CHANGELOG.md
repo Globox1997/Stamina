@@ -1,6 +1,6 @@
 ### Added:
 - 
 ### Fixed:
-- 
+- Fixed console printing
 ### Changed:
-- Updated to mc 1.21
+- 

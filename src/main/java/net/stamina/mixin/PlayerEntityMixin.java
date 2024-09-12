@@ -61,12 +61,10 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tickMixin(CallbackInfo info) {
-        // if (this.getWorld().getTime() % 5 == 0) { // maybe outcomment?
         if (!this.isSprinting()) {
             if (this.exhaustionTime <= 0) {
                 if (this.getHungerManager().getFoodLevel() > 6.0f) {
                     addStamina(1);
-                    System.out.println(this.getWorld().isClient() + " : " + this.stamina);
                 }
             } else {
                 this.exhaustionTime--;
@@ -79,7 +77,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
         } else if (this.getWorld().getTime() % 5 == 0 && this.isInCreativeMode() && this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).hasModifier(STAMINA_REDUCTION)) {
             this.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).removeModifier(STAMINA_SPEED_REDUCTION);
         }
-        // }
     }
 
     @Inject(method = "createPlayerAttributes", at = @At("RETURN"))
