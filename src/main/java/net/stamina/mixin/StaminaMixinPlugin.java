@@ -22,7 +22,7 @@ public class StaminaMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.contains("RollManagerMixin") && !FabricLoader.getInstance().isModLoaded("combatroll"))
+        if (mixinClassName.contains("RollManagerMixin") && !FabricLoader.getInstance().isModLoaded("combat_roll"))
             return false;
 
         return true;

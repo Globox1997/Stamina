@@ -34,7 +34,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 	// Roll
-	modCompileOnly ('maven.modrinth:combat-roll:1.4.0+1.20.4-fabric'){
+	modCompileOnly ('maven.modrinth:combat-roll:2.0.6+1.21.1-fabric'){
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	// Dehydration
