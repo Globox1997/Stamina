@@ -25,7 +25,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
     @Inject(method = "canSprint", at = @At("RETURN"), cancellable = true)
     private void canSprintMixin(CallbackInfoReturnable<Boolean> info) {
-        if (info.getReturnValue() && !this.isCreative() && ((StaminaAccess) this).getStamina() <= 0) {
+        if (info.getReturnValue() && !StaminaHelper.isStaminaFree(this) && ((StaminaAccess) this).getStamina() <= 0) {
             info.setReturnValue(false);
         }
     }
