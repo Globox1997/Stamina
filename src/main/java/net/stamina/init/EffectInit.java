@@ -7,12 +7,16 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
-import net.stamina.effect.EnduranceEffect;
+import net.stamina.effect.StaminaEffect;
 
 public class EffectInit {
 
-    public static final RegistryEntry<StatusEffect> ENDURANCE = register("stamina:endurance", new EnduranceEffect(StatusEffectCategory.BENEFICIAL, 12221440)
-            .addAttributeModifier(AttributeInit.GENERIC_MAX_STAMINA, Identifier.of("stamina", "endurance"), 90, EntityAttributeModifier.Operation.ADD_VALUE));
+    public static final RegistryEntry<StatusEffect> ENDURANCE = register("stamina:endurance", new StaminaEffect(StatusEffectCategory.BENEFICIAL, 12221440)
+            .addAttributeModifier(AttributeInit.GENERIC_MAX_STAMINA, Identifier.of("stamina", "endurance"), ConfigInit.CONFIG.enduranceMaxStaminaBonus, EntityAttributeModifier.Operation.ADD_VALUE)
+            .addAttributeModifier(AttributeInit.GENERIC_STAMINA_REGEN, Identifier.of("stamina", "endurance_regen"), ConfigInit.CONFIG.enduranceRegenBonus,
+                    EntityAttributeModifier.Operation.ADD_MULTIPLIED_BASE));
+    public static final RegistryEntry<StatusEffect> FATIGUE = register("stamina:fatigue", new StaminaEffect(StatusEffectCategory.HARMFUL, 7038072)
+            .addAttributeModifier(AttributeInit.GENERIC_MAX_STAMINA, Identifier.of("stamina", "fatigue"), -ConfigInit.CONFIG.fatigueMaxStaminaReduction, EntityAttributeModifier.Operation.ADD_VALUE));
 
     public static void init() {
     }
