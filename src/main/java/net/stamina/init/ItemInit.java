@@ -14,11 +14,16 @@ public class ItemInit {
 
     public static final RegistryEntry<Potion> ENDURANCE = register("stamina:endurance", new Potion(new StatusEffectInstance(EffectInit.ENDURANCE, 3600)));
     public static final RegistryEntry<Potion> LONG_ENDURANCE = register("stamina:long_endurance", new Potion(new StatusEffectInstance(EffectInit.ENDURANCE, 9600)));
+    public static final RegistryEntry<Potion> FATIGUE = register("stamina:fatigue", new Potion(new StatusEffectInstance(EffectInit.FATIGUE, 1800)));
+    public static final RegistryEntry<Potion> LONG_FATIGUE = register("stamina:long_fatigue", new Potion(new StatusEffectInstance(EffectInit.FATIGUE, 4800)));
 
     public static void init() {
         FabricBrewingRecipeRegistryBuilder.BUILD.register((builder) -> {
             builder.registerPotionRecipe(Potions.AWKWARD, Items.LAPIS_LAZULI, ENDURANCE);
             builder.registerPotionRecipe(ItemInit.ENDURANCE, Items.REDSTONE, LONG_ENDURANCE);
+            builder.registerPotionRecipe(ItemInit.ENDURANCE, Items.FERMENTED_SPIDER_EYE, FATIGUE);
+            builder.registerPotionRecipe(ItemInit.LONG_ENDURANCE, Items.FERMENTED_SPIDER_EYE, LONG_FATIGUE);
+            builder.registerPotionRecipe(ItemInit.FATIGUE, Items.REDSTONE, LONG_FATIGUE);
         });
     }
 
