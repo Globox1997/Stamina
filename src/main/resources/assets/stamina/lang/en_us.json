@@ -2,8 +2,6 @@
     "text.autoconfig.stamina.title": "Stamina Config",
     "text.autoconfig.stamina.category.gameplay": "Gameplay",
     "text.autoconfig.stamina.category.hud": "Hud",
-    "text.autoconfig.stamina.option.maxStamina": "Max Stamina",
-    "text.autoconfig.stamina.option.staminaRegen": "Stamina Regeneration",
     "text.autoconfig.stamina.option.sprintStaminaCost": "Sprint Stamina Cost",
     "text.autoconfig.stamina.option.exhaustionStaminaMultiplier": "Exhaustion Stamina Multiplier",
     "text.autoconfig.stamina.option.minSprintStamina": "Min Sprint Stamina",

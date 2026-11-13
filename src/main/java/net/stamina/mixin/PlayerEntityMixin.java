@@ -1,20 +1,8 @@
 package net.stamina.mixin;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.attribute.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
@@ -31,6 +19,13 @@ import net.stamina.config.StaminaConfig;
 import net.stamina.init.AttributeInit;
 import net.stamina.init.ConfigInit;
 import net.stamina.util.StaminaHelper;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements StaminaAccess {
@@ -105,10 +100,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
         }
         PlayerEntity playerEntity = (PlayerEntity) (Object) this;
         StaminaConfig config = ConfigInit.get(this.getWorld());
-        if (!this.getWorld().isClient()) {
-            updateBaseValue(AttributeInit.GENERIC_MAX_STAMINA, config.maxStamina);
-            updateBaseValue(AttributeInit.GENERIC_STAMINA_REGEN, config.staminaRegen);
-        }
+
         int maxStamina = (int) this.getAttributeValue(AttributeInit.GENERIC_MAX_STAMINA);
         if (this.stamina < 0 || this.stamina > maxStamina) {
             this.stamina = maxStamina;
@@ -272,14 +264,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
             this.lastSyncedStamina = this.stamina;
             this.forceStaminaSync = false;
             StaminaHelper.syncStamina(serverPlayerEntity, force);
-        }
-    }
-
-    @Unique
-    private void updateBaseValue(RegistryEntry<EntityAttribute> attribute, double value) {
-        EntityAttributeInstance attributeInstance = this.getAttributeInstance(attribute);
-        if (attributeInstance != null && attributeInstance.getBaseValue() != value) {
-            attributeInstance.setBaseValue(value);
         }
     }
 

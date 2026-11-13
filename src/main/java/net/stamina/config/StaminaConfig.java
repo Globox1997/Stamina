@@ -10,12 +10,6 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 public class StaminaConfig implements ConfigData {
 
     @ConfigEntry.Category("gameplay")
-    @Comment("Base max stamina, 10 - 2048")
-    public int maxStamina = 360;
-    @ConfigEntry.Category("gameplay")
-    @Comment("Base stamina regeneration per tick")
-    public float staminaRegen = 1.0f;
-    @ConfigEntry.Category("gameplay")
     @Comment("Stamina cost per tick while sprinting")
     public float sprintStaminaCost = 1.0f;
     @ConfigEntry.Category("gameplay")
@@ -95,8 +89,6 @@ public class StaminaConfig implements ConfigData {
 
     @Override
     public void validatePostLoad() {
-        this.maxStamina = Math.max(10, Math.min(2048, this.maxStamina));
-        this.staminaRegen = Math.max(0.0f, this.staminaRegen);
         this.sprintStaminaCost = Math.max(0.0f, this.sprintStaminaCost);
         this.exhaustionStaminaMultiplier = Math.max(0.0f, this.exhaustionStaminaMultiplier);
         this.minSprintStamina = Math.max(0, Math.min(100, this.minSprintStamina));
