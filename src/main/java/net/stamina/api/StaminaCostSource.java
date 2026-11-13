@@ -6,5 +6,7 @@ public enum StaminaCostSource {
     SHIELD,
     CLIMB,
     ELYTRA_BOOST,
+    ATTACK,
+    MINING,
     OTHER
 }

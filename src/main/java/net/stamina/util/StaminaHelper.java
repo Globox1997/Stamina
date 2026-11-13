@@ -1,15 +1,24 @@
 package net.stamina.util;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.stamina.access.StaminaAccess;
+import net.stamina.config.StaminaConfig;
 import net.stamina.init.AttributeInit;
 import net.stamina.init.ConfigInit;
 import net.stamina.network.packet.StaminaConfigPacket;
 import net.stamina.network.packet.StaminaPacket;
 
 public class StaminaHelper {
+
+    private static final double REFERENCE_ATTACK_SPEED = 1.6D;
+    private static final float MAX_MINING_HARDNESS = 5.0f;
 
     public static boolean isExempt(PlayerEntity playerEntity) {
         return playerEntity.isCreative() || playerEntity.isSpectator();
@@ -32,6 +41,28 @@ public class StaminaHelper {
             return false;
         }
         return ((StaminaAccess) playerEntity).getStamina() <= getSprintThreshold(playerEntity);
+    }
+
+    public static float getAttackStaminaCost(PlayerEntity playerEntity, StaminaConfig config) {
+        double attackSpeed = Math.max(0.1D, playerEntity.getAttributeValue(EntityAttributes.GENERIC_ATTACK_SPEED));
+        float cost = (float) (config.attackStaminaCost * REFERENCE_ATTACK_SPEED / attackSpeed);
+        if (playerEntity.getAttackCooldownProgress(0.5f) > 0.9f) {
+            if (playerEntity.isSprinting()) {
+                cost *= config.sprintAttackStaminaMultiplier;
+            } else if (playerEntity.fallDistance > 0.0f && !playerEntity.isOnGround() && !playerEntity.isClimbing() && !playerEntity.isTouchingWater()
+                    && !playerEntity.hasStatusEffect(StatusEffects.BLINDNESS) && !playerEntity.hasVehicle()) {
+                cost *= config.criticalAttackStaminaMultiplier;
+            }
+        }
+        return cost;
+    }
+
+    public static float getMiningStaminaCost(BlockState state, World world, BlockPos pos, StaminaConfig config) {
+        float hardness = state.getHardness(world, pos);
+        if (hardness <= 0.0f) {
+            return 0.0f;
+        }
+        return config.miningStaminaCost * Math.min(hardness, MAX_MINING_HARDNESS);
     }
 
     public static void syncStamina(ServerPlayerEntity serverPlayerEntity, boolean force) {

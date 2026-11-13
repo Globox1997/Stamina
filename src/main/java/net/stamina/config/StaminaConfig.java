@@ -46,6 +46,20 @@ public class StaminaConfig implements ConfigData {
     @Comment("Stamina cost per firework boost while flying with an elytra")
     public float elytraBoostStaminaCost = 30.0f;
     @ConfigEntry.Category("gameplay")
+    @Comment("Stamina cost per attack at an attack speed of 1.6 (sword), slower weapons cost more")
+    public float attackStaminaCost = 6.0f;
+    @ConfigEntry.Category("gameplay")
+    @Comment("Attack cost multiplier for critical (jump) attacks")
+    public float criticalAttackStaminaMultiplier = 1.5f;
+    @ConfigEntry.Category("gameplay")
+    @Comment("Attack cost multiplier for sprint attacks")
+    public float sprintAttackStaminaMultiplier = 1.5f;
+    @ConfigEntry.Category("gameplay")
+    public boolean miningCostsStamina = false;
+    @ConfigEntry.Category("gameplay")
+    @Comment("Stamina cost per point of block hardness when mining, hardness is capped at 5")
+    public float miningStaminaCost = 2.0f;
+    @ConfigEntry.Category("gameplay")
     @Comment("Additional sprint cost per speed effect level, 0.2 = 20%")
     public float speedEffectSprintMultiplier = 0.2f;
     @ConfigEntry.Category("gameplay")
@@ -99,6 +113,10 @@ public class StaminaConfig implements ConfigData {
         this.shieldBlockStaminaCost = Math.max(0.0f, this.shieldBlockStaminaCost);
         this.climbStaminaCost = Math.max(0.0f, this.climbStaminaCost);
         this.elytraBoostStaminaCost = Math.max(0.0f, this.elytraBoostStaminaCost);
+        this.attackStaminaCost = Math.max(0.0f, this.attackStaminaCost);
+        this.criticalAttackStaminaMultiplier = Math.max(0.0f, this.criticalAttackStaminaMultiplier);
+        this.sprintAttackStaminaMultiplier = Math.max(0.0f, this.sprintAttackStaminaMultiplier);
+        this.miningStaminaCost = Math.max(0.0f, this.miningStaminaCost);
         this.hungerEffectRegenMultiplier = Math.max(0.0f, this.hungerEffectRegenMultiplier);
         this.weaknessEffectRegenMultiplier = Math.max(0.0f, this.weaknessEffectRegenMultiplier);
         this.saturationRegenMultiplier = Math.max(0.0f, this.saturationRegenMultiplier);
