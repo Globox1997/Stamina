@@ -23,6 +23,7 @@
     "text.autoconfig.stamina.option.hungerEffectRegenMultiplier": "Hunger Effect Regeneration Multiplier",
     "text.autoconfig.stamina.option.weaknessEffectRegenMultiplier": "Weakness Effect Regeneration Multiplier",
     "text.autoconfig.stamina.option.saturationRegenMultiplier": "Saturation Regeneration Multiplier",
+    "text.autoconfig.stamina.option.starvingRegenMultiplier": "Starving Regeneration Multiplier",
     "text.autoconfig.stamina.option.enduranceMaxStaminaBonus": "Endurance Max Stamina Bonus",
     "text.autoconfig.stamina.option.enduranceRegenBonus": "Endurance Regeneration Bonus",
     "text.autoconfig.stamina.option.fatigueMaxStaminaReduction": "Fatigue Max Stamina Reduction",

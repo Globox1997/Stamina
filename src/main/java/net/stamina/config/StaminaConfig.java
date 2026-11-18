@@ -72,6 +72,9 @@ public class StaminaConfig implements ConfigData {
     @Comment("Regeneration multiplier while having food saturation")
     public float saturationRegenMultiplier = 1.25f;
     @ConfigEntry.Category("gameplay")
+    @Comment("Regeneration multiplier while starving or dehydrated, only regenerates up to the sprint threshold")
+    public float starvingRegenMultiplier = 0.1f;
+    @ConfigEntry.Category("gameplay")
     @Comment("Max stamina bonus of the endurance effect, requires restart")
     @ConfigEntry.Gui.RequiresRestart
     public int enduranceMaxStaminaBonus = 90;
@@ -120,6 +123,7 @@ public class StaminaConfig implements ConfigData {
         this.hungerEffectRegenMultiplier = Math.max(0.0f, this.hungerEffectRegenMultiplier);
         this.weaknessEffectRegenMultiplier = Math.max(0.0f, this.weaknessEffectRegenMultiplier);
         this.saturationRegenMultiplier = Math.max(0.0f, this.saturationRegenMultiplier);
+        this.starvingRegenMultiplier = Math.max(0.0f, this.starvingRegenMultiplier);
     }
 
 }

@@ -36,6 +36,10 @@ public class StaminaHelper {
         return (int) (playerEntity.getAttributeValue(AttributeInit.GENERIC_MAX_STAMINA) * (ConfigInit.get(playerEntity.getWorld()).minSprintStamina / 100.0f));
     }
 
+    public static int getStarvingStaminaLimit(PlayerEntity playerEntity) {
+        return Math.max(1, getSprintThreshold(playerEntity));
+    }
+
     public static boolean isOutOfStamina(PlayerEntity playerEntity) {
         if (isStaminaFree(playerEntity)) {
             return false;

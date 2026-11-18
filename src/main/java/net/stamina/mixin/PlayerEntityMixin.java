@@ -226,7 +226,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
             return;
         }
         HungerManager hungerManager = this.getHungerManager();
-        if (hungerManager.getFoodLevel() <= config.minFoodLevel) {
+        boolean starving = hungerManager.getFoodLevel() <= config.minFoodLevel;
+        if (starving && this.stamina >= StaminaHelper.getStarvingStaminaLimit((PlayerEntity) (Object) this)) {
+            this.pendingStaminaRegen = 0.0f;
             return;
         }
         float regen = (float) this.getAttributeValue(AttributeInit.GENERIC_STAMINA_REGEN);
@@ -238,6 +240,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements StaminaA
         }
         if (hungerManager.getSaturationLevel() > 0.0f) {
             regen *= config.saturationRegenMultiplier;
+        }
+        if (starving) {
+            regen *= config.starvingRegenMultiplier;
         }
         regen = StaminaEvents.MODIFY_REGEN.invoker().modifyRegen((PlayerEntity) (Object) this, regen);
         if (regen <= 0.0f) {
